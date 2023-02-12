@@ -150,18 +150,7 @@ app
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
-
-app
-.route('/api/v1/users')
-.get(getAllUsers)
-.post(createUser);
-
-app
-  .route('/api/v1/users/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
-
+  
 const port = 3000;
 app.listen(port, () => {
   console.log('Server is started and listening on port 3000...');
