@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { response } = require('../app');
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
@@ -9,6 +10,16 @@ exports.checkId = (request, response, next, value) => {
     return response.status(404).json({
       status: 'fail',
       message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
+exports.checkBody = (request, response, next) => {
+  if (!request.body.name || !request.body.price) {
+    return response.status(400).json({
+      status: 'fail',
+      message: 'missing name or price',
     });
   }
   next();
