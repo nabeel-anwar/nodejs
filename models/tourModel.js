@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
     require: [true, 'A tour must have a name'],
     unique: true,
-    trim: true
+    trim: true,
+    maxLength: [40, "A maximum character size is 40"],
+    minLength: [10, "A minimum character size is 10"]
   },
   duration: {
     type: Number,
@@ -18,10 +21,16 @@ const tourSchema = new mongoose.Schema({
   difficulty: {
     type: String,
     require: [true, 'A tour must have a difficulty'],
+    enum: {
+      values: ['easy', 'medium', 'difficult'],
+      message: "Difficulty is ether: easy, medium, difficult"
+    }
   },
   ratingsAverage: {
     type: Number,
     default: 4.5,
+    min: [1, "Rating must above to 1"],
+    max: [5, "Rating must below to 5"]
   },
   ratingsQuantity: {
     type: Number,
@@ -33,6 +42,13 @@ const tourSchema = new mongoose.Schema({
   },
   priceDiscount: {
     type: Number,
+    validate: {
+      //works only on new creation doc not on update
+      validator: function (val) {
+        return val < this.price;
+      },
+      message: "Discount price must below the regular price"
+    }
   },
   summary: {
     type: String,
@@ -50,10 +66,34 @@ const tourSchema = new mongoose.Schema({
   images: [String],
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
+    select: false
   },
   startDates: [Date]
+},
+{
+  toJSON: {virtuals: true},
+  toObject: {virtuals: true},
 });
+
+tourSchema.virtual("durationWeeks").get(function(){
+  return this.duration / 7;
+})
+
+// Document Middleware: runs before .save or .create
+
+// tourSchema.pre('save', function (next) {
+//   next();
+// })
+
+// tourSchema.post('save', function (docs, next) {
+//   next();
+// })
+
+// //Query Middleware
+// tourSchema.pre("find", function(next){
+// next();
+// });
 
 const Tour = new mongoose.model('Tour', tourSchema);
 module.exports = Tour;
