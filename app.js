@@ -23,4 +23,13 @@ app.use((request, response, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
+app.all('*', (request, response, next) => {
+  response.status(404).json({
+    status: "fail",
+    message: `can't find ${request.originalUrl} on this server`
+  });
+
+  next();
+})
+
 module.exports = app;

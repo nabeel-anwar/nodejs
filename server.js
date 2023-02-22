@@ -1,7 +1,8 @@
 const mongoos = require('mongoose');
 const dotenv = require('dotenv');
-const app = require('./app');
 dotenv.config({ path: './config.env' });
+
+const app = require('./app');
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
@@ -10,7 +11,7 @@ const DB = process.env.DATABASE.replace(
 
 mongoos
   .connect(process.env.DATABASE_LOCAL)
-  .then(() => console.log('Connection Successfull'))
+  .then(() => console.log('DB Connection Successful'))
   .catch(() => {
     console.log('Connection Error!');
   });
