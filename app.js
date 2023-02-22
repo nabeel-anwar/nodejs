@@ -1,11 +1,15 @@
 const express = require('express');
 const morgan = require('morgan');
+
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
+const AppError = require('./utils/appError');
+const errorHandler = require('./controller/errorController');
+
 const app = express();
 
-// 2) Middlewares
+// 2) Middleware
 if(process.env.NODE_ENV === "development"){
   app.use(morgan('dev'));
 }
@@ -24,12 +28,14 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
 app.all('*', (request, response, next) => {
-  response.status(404).json({
-    status: "fail",
-    message: `can't find ${request.originalUrl} on this server`
-  });
+  
+  // const err = new Error(`can't find ${request.originalUrl} on this server`);
+  // err.status = "fail";
+  // err.statusCode = 404;
 
-  next();
+  next(new AppError(`can't find ${request.originalUrl} on this server`, 404)); // calling next() with param jumps to error middleware
 })
+
+app.use(errorHandler); // Error handling middleware
 
 module.exports = app;
