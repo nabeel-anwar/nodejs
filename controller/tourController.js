@@ -1,6 +1,7 @@
-const { request, response } = require('express');
 const Tour = require('./../models/tourModel');
+
 const APIFeatures = require('./../utils/apiFeatures');
+const AppError = require('./../utils/appError');
 
 exports.aliasTopCheap = (request, response, next) => {
   request.query.limit = '5';
@@ -9,7 +10,7 @@ exports.aliasTopCheap = (request, response, next) => {
   next();
 };
 
-exports.getAllTours = async (request, response) => {
+exports.getAllTours = async (request, response, next) => {
   try {
     console.log(request.query);
     const features = new APIFeatures(Tour, request.query)
@@ -31,14 +32,13 @@ exports.getAllTours = async (request, response) => {
       },
     });
   } catch (error) {
-    response.status(404).json({
-      status: 'fail',
-      message: error.message,
-    });
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
   }
 };
 
-exports.getTour = async (request, response) => {
+exports.getTour = async (request, response, next) => {
   try {
     const tour = await Tour.findById(request.params.id);
     //Tour.findOne({key: value})
@@ -50,17 +50,13 @@ exports.getTour = async (request, response) => {
       },
     });
   } catch (error) {
-    response.status(404).json({
-      status: 'fail',
-      message: error.message,
-    });
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
   }
 };
 
-exports.createTour = async (request, response) => {
-  // const newTour = new Tour(request.body);
-  // newTour.save();
-
+exports.createTour = async (request, response, next) => {
   try {
     const newTour = await Tour.create(request.body);
 
@@ -71,14 +67,13 @@ exports.createTour = async (request, response) => {
       },
     });
   } catch (error) {
-    response.status(404).json({
-      status: 'fail',
-      message: error.message,
-    });
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
   }
 };
 
-exports.updateTour = async (request, response) => {
+exports.updateTour = async (request, response, next) => {
   try {
     const tour = await Tour.findByIdAndUpdate(request.params.id, request.body, {
       new: true,
@@ -92,14 +87,13 @@ exports.updateTour = async (request, response) => {
       },
     });
   } catch (error) {
-    response.status(404).json({
-      status: 'fail',
-      message: error.message,
-    });
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
   }
 };
 
-exports.deleteTour = async (request, response) => {
+exports.deleteTour = async (request, response, next) => {
   try {
     await Tour.findByIdAndDelete(request.params.id);
 
@@ -108,14 +102,13 @@ exports.deleteTour = async (request, response) => {
       data: null,
     });
   } catch (error) {
-    response.status(404).json({
-      status: 'fail',
-      message: error.message,
-    });
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
   }
 };
 
-exports.getTourStats = async (request, response) => {
+exports.getTourStats = async (request, response, next) => {
   try {
     const stats = await Tour.aggregate([
       {
@@ -153,14 +146,13 @@ exports.getTourStats = async (request, response) => {
       },
     });
   } catch (error) {
-    response.status(404).json({
-      status: 'fail',
-      message: error.message,
-    });
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
   }
 };
 
-exports.getMonthlyPlan = async (request, response) => {
+exports.getMonthlyPlan = async (request, response, next) => {
   try {
     const year = request.params.year * 1;
 
@@ -207,9 +199,8 @@ exports.getMonthlyPlan = async (request, response) => {
       },
     });
   } catch (error) {
-    response.status(404).json({
-      status: 'fail',
-      message: error.message,
-    });
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
   }
 };
