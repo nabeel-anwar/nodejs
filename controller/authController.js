@@ -1,3 +1,4 @@
+const { promisify } = require('util');
 const User = require('./../models/userModel');
 const jwt = require('jsonwebtoken');
 const AppError = require('./../utils/appError');
@@ -42,7 +43,7 @@ exports.login = async (request, response, next) => {
       return next(new AppError('please provide email and password'), 400);
 
     // 2) check if user exist and password is correct
-    const user = await User.findOne({ email }).select('+password'); // password is false in model i.e explicitly select the password
+    const user = await User.findOne({ email }).select('+password'); // password selection is false in model i.e explicitly select the password
 
     // 3) Compare the password "comparePassword is instance method defined in modal"
     if (!user || !(await user.comparePassword(password, user.password)))
@@ -54,6 +55,49 @@ exports.login = async (request, response, next) => {
       status: 'success',
       token,
     });
+  } catch (error) {
+    error.statusCode = 404;
+    error.isOperational = true;
+    next(error);
+  }
+};
+
+exports.protect = async (request, response, next) => {
+  try {
+    // 1) check if the token is present in the header
+    let token;
+    if (
+      request.headers.authorization &&
+      request.headers.authorization.startsWith('bearer')
+    ) {
+      token = request.headers.authorization.split(' ')[1];
+    }
+
+    if (!token) {
+      next(
+        new AppError('you are not logged in. please login to continue', 401)
+      );
+    }
+
+    // 2) Verify the token
+    const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    // 3) check if the user still exist
+    const freshUser = await User.findById(decode.id);
+
+    if(!freshUser) 
+      next(new AppError("no user belonging to this token", 401));
+
+    // Check if the user changed the password  after the token issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next(
+          new AppError('User recently changed password! Please log in again.', 401)
+        );
+      }
+    
+      // GRANT ACCESS TO PROTECTED ROUTE
+      req.user = currentUser;
+    next();
   } catch (error) {
     error.statusCode = 404;
     error.isOperational = true;

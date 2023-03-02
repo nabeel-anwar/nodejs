@@ -48,6 +48,8 @@ module.exports = (err, request, response, next) => {
     if(err.name === "CastError") error = handleCastError(error);
     if(err.code === 11000) error = handleDuplicateValue(error);
     if(err.name === "ValidationError") error = new AppError(err.message, 400);
+    if(err.name === "JsonWebTokenError") error = new AppError(err.message, 401);
+    if(err.name === "TokenExpiredError") error = new AppError("your session has been expired. please login again", 401);
 
     sendErrorProd(error, response);
   }
