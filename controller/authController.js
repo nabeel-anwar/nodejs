@@ -89,14 +89,14 @@ exports.protect = async (request, response, next) => {
       next(new AppError("no user belonging to this token", 401));
 
     // Check if the user changed the password  after the token issued
-      if (currentUser.changedPasswordAfter(decoded.iat)) {
+      if (freshUser.changedPasswordAfter(decode.iat)) {
         return next(
-          new AppError('User recently changed password! Please log in again.', 401)
+          new AppError('user recently changed password! Please log in again.', 401)
         );
       }
     
       // GRANT ACCESS TO PROTECTED ROUTE
-      req.user = currentUser;
+      request.user = freshUser;
     next();
   } catch (error) {
     error.statusCode = 404;

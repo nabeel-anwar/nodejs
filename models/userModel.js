@@ -49,13 +49,14 @@ userSchema.methods.comparePassword = async function (requestPassword, DbPassword
 
 
 userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+    let changedTimestamp;
     if (this.passwordChangedAt) {
-      const changedTimestamp = parseInt(
+      changedTimestamp = parseInt(
         this.passwordChangedAt.getTime() / 1000,
         10
       );
   
-      return JWTTimestamp < changedTimestamp;
+      return JWTTimestamp < changedTimestamp; // if pass changed time is greater then after issued then password is changed
     }
   
     // False means NOT changed
