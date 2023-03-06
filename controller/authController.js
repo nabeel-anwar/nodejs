@@ -18,7 +18,7 @@ exports.signup = async (request, response, next) => {
       passwordConfirm: request.body.passwordConfirm,
     });
 
-    const token = signToken(newUser._id);
+    const token = signToken(newUser._id); //creating jwt token
 
     response.status(201).json({
       status: 'success',
@@ -83,20 +83,20 @@ exports.protect = async (request, response, next) => {
     const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     // 3) check if the user still exist
-    const freshUser = await User.findById(decode.id);
+    const currentUser = await User.findById(decode.id);
 
-    if(!freshUser) 
+    if(!currentUser) 
       next(new AppError("no user belonging to this token", 401));
 
     // Check if the user changed the password  after the token issued
-      if (freshUser.changedPasswordAfter(decode.iat)) {
+      if (currentUser.changedPasswordAfter(decode.iat)) {
         return next(
           new AppError('user recently changed password! Please log in again.', 401)
         );
       }
     
       // GRANT ACCESS TO PROTECTED ROUTE
-      request.user = freshUser;
+      request.user = currentUser;
     next();
   } catch (error) {
     error.statusCode = 404;
