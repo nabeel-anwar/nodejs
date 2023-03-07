@@ -2,8 +2,9 @@ POST http://localhost:3000/api/v1/users/signup
 Content-Type: application/json
 
 {
-    "name": "Nabeel Anwar",
+    "name": "Nabeel",
     "email": "nabeel@gmail.com",
-    "password": "Hello@123",
-    "passwordConfirm": "Hello@123"
+    "password": "nabeel@123",
+    "passwordConfirm": "nabeel@123",
+    "role": "user"
 }

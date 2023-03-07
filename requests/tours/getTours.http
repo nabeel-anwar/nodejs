@@ -1,2 +1,0 @@
-GET http://localhost:3000/api/v1/tours
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MDY2MGI3ZmJjNjA5N2JlN2VhYjU2NiIsImlhdCI6MTY3ODEzOTY0NywiZXhwIjoxNjc5MDAzNjQ3fQ.2zuLSeHCDapql_wEA3R_6hKmM5K97jaeDjcCovfY7sY

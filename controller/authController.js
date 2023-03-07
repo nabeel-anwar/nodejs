@@ -2,6 +2,8 @@ const { promisify } = require('util');
 const User = require('./../models/userModel');
 const jwt = require('jsonwebtoken');
 const AppError = require('./../utils/appError');
+const { request } = require('http');
+const { response } = require('../app');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -16,6 +18,7 @@ exports.signup = async (request, response, next) => {
       email: request.body.email,
       password: request.body.password,
       passwordConfirm: request.body.passwordConfirm,
+      role: request.body.role
     });
 
     const token = signToken(newUser._id); //creating jwt token
@@ -104,3 +107,14 @@ exports.protect = async (request, response, next) => {
     next(error);
   }
 };
+
+exports.restrictTo = function (...roles) {
+  return (request, response, next) => {
+    //
+    if(!roles.includes(request.user.role)){
+      return next(new AppError('You don\'t have permission to perform this action', 403));
+    }
+
+    next();
+  }
+}
