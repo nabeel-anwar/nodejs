@@ -1,5 +1,5 @@
 const Review = require('./../models/reviewModel');
-const AppError = require('./../utils/appError');
+const factory = require('./handlerFactory');
 
 exports.getAllReview = async (request, response, next) => {
   try {
@@ -40,3 +40,5 @@ exports.createReview = async (request, response, next) => {
     next(error);
   }
 };
+
+exports.deleteReview = factory.deleteOne(Review);

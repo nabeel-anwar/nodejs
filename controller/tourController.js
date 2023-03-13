@@ -1,4 +1,5 @@
 const Tour = require('./../models/tourModel');
+const factory = require('./handlerFactory');
 
 const APIFeatures = require('./../utils/apiFeatures');
 const AppError = require('./../utils/appError');
@@ -93,20 +94,7 @@ exports.updateTour = async (request, response, next) => {
   }
 };
 
-exports.deleteTour = async (request, response, next) => {
-  try {
-    await Tour.findByIdAndDelete(request.params.id);
-
-    response.status(204).json({
-      status: 'success',
-      data: null,
-    });
-  } catch (error) {
-    error.statusCode = 404;
-    error.isOperational = true;
-    next(error);
-  }
-};
+exports.deleteTour = factory.deleteOne(Tour);
 
 exports.getTourStats = async (request, response, next) => {
   try {
