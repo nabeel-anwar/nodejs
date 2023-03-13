@@ -3,7 +3,10 @@ const AppError = require('./../utils/appError');
 
 exports.getAllReview = async (request, response, next) => {
   try {
-    const reviews = await Review.find();
+    const filter = {};
+    if (request.params.tourId) filter.tour = request.params.tourId;
+
+    const reviews = await Review.find(filter);
 
     response.status(200).json({
       status: 'success',
@@ -21,6 +24,8 @@ exports.getAllReview = async (request, response, next) => {
 
 exports.createReview = async (request, response, next) => {
   try {
+    if (!request.body.user) request.body.user = request.user.id;
+    if (!request.body.tour) request.body.tour = request.params.tourId;
     const newReview = await Review.create(request.body);
 
     response.status(201).json({

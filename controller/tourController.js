@@ -40,7 +40,7 @@ exports.getAllTours = async (request, response, next) => {
 
 exports.getTour = async (request, response, next) => {
   try {
-    const tour = await Tour.findById(request.params.id);
+    const tour = await Tour.findById(request.params.id).populate('reviews');
     //Tour.findOne({key: value})
 
     response.status(200).json({
@@ -164,32 +164,32 @@ exports.getMonthlyPlan = async (request, response, next) => {
         $match: {
           startDates: {
             $gte: new Date(`${year}-01-01`),
-            $lte: new Date(`${year}-12-31`)
-          }
+            $lte: new Date(`${year}-12-31`),
+          },
         },
       },
       {
         $group: {
-          _id: {$month: "$startDates"},
-          numOfTours: {$sum: 1},
-          tours: {$push: "$name"}
-        }
+          _id: { $month: '$startDates' },
+          numOfTours: { $sum: 1 },
+          tours: { $push: '$name' },
+        },
       },
       {
         $addFields: {
-          month: "$_id"
-        } 
+          month: '$_id',
+        },
       },
       {
         $project: {
-          _id: 0
-        }
+          _id: 0,
+        },
       },
       {
         $sort: {
-          numOfTours: -1
-        }
-      }
+          numOfTours: -1,
+        },
+      },
     ]);
 
     response.status(200).json({
