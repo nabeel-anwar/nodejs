@@ -23,7 +23,6 @@ exports.deleteOne = (Model) => {
 exports.updateOne = (Model) => {
   return async (request, response, next) => {
     try {
-      console.log(request.params.id, request.body);
       const doc = await Model.findByIdAndUpdate(
         request.params.id,
         request.body,
