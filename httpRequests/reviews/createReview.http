@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MDZmN2U0MjM5Y2QxMDczNTg3ZmQ5OCIsImlhdCI6MTY3ODU0MDU4NywiZXhwIjoxNjc5NDA0NTg3fQ.H347_u59mDvo8vBdcq6NHYz8i8syi7IUMxdkQwUKnoQ
 
 {
-    "review": "Reallt enjoy it.",
+    "review": "Mind Blowing",
     "rating": 4.5,
     "user": "6406f7e4239cd1073587fd98",
     "tour": "5c88fa8cf4afda39709c2951"

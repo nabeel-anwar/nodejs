@@ -1,0 +1,6 @@
+PATCH http://localhost:3000/api/v1/reviews/640fe3d30c1e93fd98f2109e
+Content-Type: application/json
+
+{
+    "review": "Mind Blowing Really Enjoy It!!!!"
+}

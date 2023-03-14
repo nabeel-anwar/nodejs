@@ -15,12 +15,15 @@ router
   .post(
     authController.protect,
     authController.restrictTo('user'),
+    reviewController.setTourUserIds,
     reviewController.createReview
   )
   .delete(reviewController.deleteReview);
 
 router
   .route('/:id')
+  .get(reviewController.getReview)
+  .patch(reviewController.UpdateReview)
   .delete(
     authController.protect,
     authController.restrictTo('admin'),
