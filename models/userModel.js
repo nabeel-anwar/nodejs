@@ -54,7 +54,7 @@ const userSchema = mongoose.Schema({
 // Document Middleware
 
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) return next(); // for not encrypt again when update detail
 
   this.password = await bcrypt.hash(this.password, 12);
 

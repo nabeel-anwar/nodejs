@@ -10,6 +10,11 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
+exports.getMe = (request, response, next) => {
+  request.params.id = request.user.id;
+
+  next();
+};
 exports.updateMe = async (request, response, next) => {
   try {
     // 1) Create error if user POSTs password data
@@ -66,9 +71,10 @@ exports.deleteMe = async (request, response, next) => {
 exports.createUser = (request, response) => {
   response.status(500).json({
     status: 'error',
-    message: 'this route is not defined, please use /signup.',
+    message: 'this route is not for creating users, please use /signup.',
   });
 };
+
 exports.getAllUsers = factory.getAll(User);
 
 exports.getUser = factory.getOne(User);

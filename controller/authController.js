@@ -18,9 +18,11 @@ exports.signup = async (request, response, next) => {
     const newUser = await User.create({
       name: request.body.name,
       email: request.body.email,
+      photo: request.body.photo,
       password: request.body.password,
       passwordConfirm: request.body.passwordConfirm,
       role: request.body.role,
+      active: request.body.active,
     });
 
     const token = signToken(newUser._id); //creating jwt token
