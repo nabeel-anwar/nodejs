@@ -1,9 +1,17 @@
 const Tour = require('./../models/tourModel');
 
-exports.getTour = (request, response) => {
-  response.status(200).render('tour', {
-    title: 'The Forest Hiker',
-  });
+exports.getTour = async (request, response) => {
+  try {
+    // 1) get the data for requested tour with guides and review
+    const tour = Tour.findOne({ slug: request.params.slug }).populate({
+      path: 'reviews',
+      fields: 'review rating user',
+    });
+
+    response.status(200).render('tour', {
+      tour,
+    });
+  } catch (error) {}
 };
 
 exports.getOverview = async (request, response) => {
