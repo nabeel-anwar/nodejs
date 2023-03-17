@@ -1,0 +1,27 @@
+doctype html 
+html 
+    head 
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+        link(rel="stylesheet", href="shttps://fonts.googleapis.com/css?family=Lato:300,400,400i,700")
+        link(rel="stylesheet", href="css/style.css")
+        link(rel="shortcut icon", href="img/favicon.png", type="image/png")
+
+        title Natours | #{title}
+
+        script(src="https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js") 
+        link(rel="stylesheet", href="https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css")
+
+    body
+        // Header
+        include _header
+
+
+        // Content
+        block content 
+            h1 this is base template
+
+        // Footer
+        include _footer
+        

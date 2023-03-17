@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/v1/tours?sort=duration
+GET http://localhost:3000/api/v1/tours?fields=slug

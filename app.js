@@ -9,11 +9,15 @@ const hpp = require('hpp');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 const AppError = require('./utils/appError');
 const errorHandler = require('./controller/errorController');
 
 const app = express();
+
+app.set('view engine', 'pug');
+// app.set('views', './views');
 
 // 1) Setting security headers
 app.use(helmet());
@@ -54,16 +58,18 @@ app.use(
   })
 );
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
-
+// Testing Middleware
 app.use((request, response, next) => {
   request.requestTime = new Date().toISOString();
   next();
 });
 
+// Serving static files
+app.use(express.static(`${__dirname}/public`));
+
 // 3) Routes
 
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);

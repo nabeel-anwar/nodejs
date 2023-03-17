@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-const User = require('./userModel');
+const slugify = require('slugify');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -12,6 +11,7 @@ const tourSchema = new mongoose.Schema(
       maxLength: [40, 'A maximum character size is 40'],
       minLength: [10, 'A minimum character size is 10'],
     },
+    slug: String,
     duration: {
       type: Number,
       require: [true, 'A tour must have a duration'],
@@ -33,6 +33,7 @@ const tourSchema = new mongoose.Schema(
       default: 4.5,
       min: [1, 'Rating must above to 1'],
       max: [5, 'Rating must below to 5'],
+      set: (val) => Math.round(val * 10) / 10, // 4.666666, 46.6666, 47, 4.7
     },
     ratingsQuantity: {
       type: Number,
@@ -108,6 +109,11 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+// Index
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
+
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
@@ -121,6 +127,10 @@ tourSchema.virtual('reviews', {
 
 // Document Middleware: runs before .save or .create
 
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 // tourSchema.pre('save', function (next) {
 //   next();
 // })

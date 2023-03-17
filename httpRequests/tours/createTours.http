@@ -2,7 +2,6 @@ POST http://localhost:3000/api/v1/tours
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOGExZDViMDE5MGIyMTQzNjBkYzA1NyIsImlhdCI6MTY3ODgxOTAwMCwiZXhwIjoxNjc5NjgzMDAwfQ.B60hS4tm3J9GJtYGcjVB6gZv5iz4MvwER7GPJyMa9sY
 
-
 [
   {
     "startLocation": {
