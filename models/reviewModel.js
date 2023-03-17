@@ -1,32 +1,40 @@
 const mongoose = require('mongoose');
 const Tour = require('./tourModel');
 
-const reviewSchema = new mongoose.Schema({
-  review: {
-    type: String,
-    require: [true, 'review can not be empty'],
+const reviewSchema = new mongoose.Schema(
+  {
+    review: {
+      type: String,
+      require: [true, 'review can not be empty'],
+    },
+    rating: {
+      type: Number,
+      min: [1, 'Rating must above to 1'],
+      max: [5, 'Rating must below to 5'],
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+      select: false,
+    },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'review must belong to a user'],
+    },
+    tour: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Tour',
+      required: [true, 'review must belong to a tour'],
+    },
   },
-  rating: {
-    type: Number,
-    min: [1, 'Rating must above to 1'],
-    max: [5, 'Rating must below to 5'],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-    select: false,
-  },
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: [true, 'review must belong to a user'],
-  },
-  tour: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Tour',
-    required: [true, 'review must belong to a tour'],
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
 // Query Middleware
 
@@ -63,7 +71,7 @@ reviewSchema.statics.calcAverageRating = async function (tourId) {
     },
   ]);
 
-  console.log(stats);
+  // console.log(stats);
   if (stats.length > 0) {
     await Tour.findByIdAndUpdate(tourId, {
       ratingsAverage: stats[0].avgRating,
@@ -81,7 +89,7 @@ reviewSchema.post('save', function () {
 // update rating average after update/delete tour review
 reviewSchema.pre(/^findOneAnd/, async function (next) {
   this.r = await this.findOne().clone(); // clone for running query twice and getting review doc before update for tour id used in below post middleware
-  console.log('review', this.r);
+  // console.log('review', this.r);
   next();
 });
 

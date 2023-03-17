@@ -11,6 +11,7 @@ class APIFeatures {
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
 
+    // console.log(queryObj);
     // 1B) ADVANCED FILTERING
     // From { difficulty: 'easy', page: '2', price: { lte: '1500' } }
     // To { difficulty: 'easy', price: { $lte: '1500' } }

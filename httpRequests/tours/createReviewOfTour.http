@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOGExZTFhMmY4ZmI4MTRiNTZmYTE4MiIsImlhdCI6MTY3ODgyNzYwNSwiZXhwIjoxNjc5NjkxNjA1fQ.f8tsNvQZZaAQOHo3bwFIANl_yA2Iod78fbr6gv1VCBA
 
 {
-    "review": "Terrible again 5!!!!",
-    "rating": 3
+    "review": "Amazing!!!!",
+    "rating": 2
 }
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MDZmN2IwMjM5Y2QxMDczNTg3ZmQ5NiIsImlhdCI6MTY3ODcyNzAwNCwiZXhwIjoxNjc5NTkxMDA0fQ.ckBPct3Yw320ofaE3aI9U16166d-tChx0LjF4BexJGE // admin
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOGExZTFhMmY4ZmI4MTRiNTZmYTE4MiIsImlhdCI6MTY3ODgyNzYwNSwiZXhwIjoxNjc5NjkxNjA1fQ.f8tsNvQZZaAQOHo3bwFIANl_yA2Iod78fbr6gv1VCBA // user
